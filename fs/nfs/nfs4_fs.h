@@ -42,7 +42,9 @@ enum nfs4_client_state {
 	NFS4CLNT_LEASE_MOVED,
 	NFS4CLNT_DELEGATION_EXPIRED,
 	NFS4CLNT_RUN_MANAGER,
-	NFS4CLNT_DELEGRETURN_RUNNING,
+	NFS4CLNT_RECALL_RUNNING,
+	NFS4CLNT_RECALL_ANY_LAYOUT_READ,
+	NFS4CLNT_RECALL_ANY_LAYOUT_RW,
 };
 
 #define NFS4_RENEW_TIMEOUT		0x01
@@ -115,7 +117,7 @@ struct nfs4_state_owner {
 	unsigned long	     so_flags;
 	struct list_head     so_states;
 	struct nfs_seqid_counter so_seqid;
-	seqcount_t	     so_reclaim_seqcount;
+	seqcount_spinlock_t  so_reclaim_seqcount;
 	struct mutex	     so_delegreturn_mutex;
 };
 
